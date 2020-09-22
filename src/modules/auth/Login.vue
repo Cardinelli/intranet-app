@@ -14,7 +14,7 @@
           label-align-sm="right"
           label-for="username-email"
         >
-          <b-form-input id="username-email"></b-form-input>
+          <b-form-input v-model="loginForm.email" id="username-email"></b-form-input>
         </b-form-group>
 
         <b-form-group
@@ -23,16 +23,48 @@
           label-align-sm="right"
           label-for="password"
         >
-          <b-form-input id="password"></b-form-input>
+          <b-form-input type="password" v-model="loginForm.password" id="password"></b-form-input>
         </b-form-group>
       </b-form-group>
+      <b-button @click="actionLogin()" variant="outline-success" size="sm">Button</b-button>
     </b-card>
   </div>
 </template>
 
 <script>
   export default {
-    name: "Login"
+    name: "Login",
+    data() {
+      return {
+        loginForm: {
+          email: '',
+          password: '',
+        }
+      }
+    },
+    computed: {
+      user() {
+        return this.$store.getters.user
+      },
+      loading() {
+        return this.$store.getters.loading
+      }
+    },
+    watch: {
+      user(value) {
+        if (value !== null && value !== undefined) {
+          this.$router.push('/');
+        }
+      }
+    },
+    methods: {
+      actionLogin() {
+        if (!this.loginForm.email || !this.loginForm.password) {
+          console.log('error');
+        }
+        this.$store.dispatch('actionLogin', this.loginForm);
+      }
+    }
   }
 </script>
 
