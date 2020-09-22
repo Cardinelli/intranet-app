@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import Login from "@/modules/auth/Login";
 import Home from "@/modules/home/Home";
 import {auth} from './firebase'
+import Users from "@/modules/users/Users";
 
 Vue.use(VueRouter);
 
@@ -22,6 +23,13 @@ const router = new VueRouter({
       meta: {
         requiresAuth: true
       }
+    },
+    {
+      path: '/users',
+      component: Users,
+      meta: {
+        requiresAuth: true
+      }
     }
   ]
 })
@@ -29,7 +37,6 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   const requiresAuth = to.matched.some(x => x.meta.requiresAuth)
-
   if (requiresAuth && !auth.currentUser) {
     next('/login')
   } else {

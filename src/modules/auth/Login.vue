@@ -26,7 +26,7 @@
           <b-form-input type="password" v-model="loginForm.password" id="password"></b-form-input>
         </b-form-group>
       </b-form-group>
-      <b-button @click="actionLogin()" variant="outline-success" size="sm">Button</b-button>
+      <b-button @click="actionLogin()" variant="outline-success" size="sm">Login</b-button>
     </b-card>
   </div>
 </template>
@@ -36,6 +36,7 @@
     name: "Login",
     data() {
       return {
+        loader: false,
         loginForm: {
           email: '',
           password: '',
@@ -54,6 +55,11 @@
       user(value) {
         if (value !== null && value !== undefined) {
           this.$router.push('/');
+        }
+      },
+      loading(value) {
+        if (value !== null && value !== false) {
+          this.loader = true;
         }
       }
     },
