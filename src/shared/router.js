@@ -1,9 +1,8 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Login from "@/modules/auth/Login";
-import Home from "@/modules/home/Home";
 import {auth} from './firebase'
-import Users from "@/modules/users/Users";
+import AuthLayout from "@/core/components/layout/AuthLayout/AuthLayout";
+import DefaultLayout from "@/core/components/layout/DefaultLayout/DefaultLayout";
 
 Vue.use(VueRouter);
 
@@ -11,26 +10,17 @@ const router = new VueRouter({
   mode: 'history',
   routes: [
     {
-      path: '/login',
-      component: Login,
-      meta: {
-        requiresAuth: false
-      }
+      path: '/auth',
+      redirect: '/login',
+      component: AuthLayout,
+      children: []
     },
     {
       path: '/',
-      component: Home,
-      meta: {
-        requiresAuth: true
-      }
+      redirect: '/home',
+      component: DefaultLayout,
+      children: [],
     },
-    {
-      path: '/users',
-      component: Users,
-      meta: {
-        requiresAuth: true
-      }
-    }
   ]
 })
 
@@ -42,7 +32,6 @@ router.beforeEach((to, from, next) => {
   } else {
     next()
   }
-
 })
 
 export default router;

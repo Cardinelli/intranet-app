@@ -5,6 +5,7 @@ import Vuex from 'vuex'
 import {store} from './shared/store'
 import router from "./shared/router";
 import {auth} from './shared/firebase'
+import './modules/modules'
 
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'

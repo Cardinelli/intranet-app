@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-    <side-bar id="side-bar" v-if="$route.path !== '/login'"/>
     <transition name="slide" mode="out-in">
       <router-view id="router-view"/>
     </transition>
@@ -9,11 +8,8 @@
 
 <script>
 
-  import SideBar from "@/core/components/layout/SideBar";
-
   export default {
     name: 'App',
-    components: {SideBar},
   }
 </script>
 
@@ -27,18 +23,6 @@
     flex-direction: row;
     align-content: center;
     background-color: #439093;
-  }
-
-  #side-bar {
-    width: 21%;
-  }
-
-  #router-view {
-    margin: 0 auto;
-    margin-top: 50px;
-    padding: 30px;
-    width: 100%;
-    height: 35%;
   }
 
   .slide-enter-active {
