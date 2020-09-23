@@ -1,5 +1,8 @@
 <template>
   <div class="users-wrapper">
+    <div class="btn-wrapper m-3">
+      <b-button size="sm" variant="outline-info">Create User</b-button>
+    </div>
     <b-table hover :items="users"></b-table>
   </div>
 </template>
@@ -12,7 +15,9 @@
   export default {
     name: "Users",
     data() {
-      return {}
+      return {
+        usersData: [],
+      }
     },
     computed: {
       ...mapState({
@@ -33,6 +38,10 @@
   .users-wrapper {
     margin-left: 25%;
     margin-top: 5%;
+
+    table{
+      width: 70%;
+    }
   }
 
 </style>
