@@ -31,13 +31,13 @@
 
     <div class="sidebar">
       <div class="sidebar-button">
-        <router-link to="/"> Home</router-link>
+        <router-link to="/"><i class="fas fa-tachometer-alt"></i> <span class="ml-2"> Dashboard </span></router-link>
       </div>
       <div class="sidebar-button">
-        <router-link to="/login"> Users</router-link>
+        <router-link to="/users"><i class="fas fa-users"></i> <span class="ml-2"> Users </span></router-link>
       </div>
       <div class="sidebar-button">
-        <router-link to="/"> Settings</router-link>
+        <router-link to="/"><i class="fas fa-cog"></i> <span class="ml-2"> Settings </span></router-link>
       </div>
     </div>
   </div>
@@ -59,9 +59,9 @@
     methods: {
       signOut() {
         firebase.auth().signOut()
-        .then(() => {
-          this.$router.push('/login')
-        })
+          .then(() => {
+            this.$router.push('/login')
+          })
       }
     }
   }
