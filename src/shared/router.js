@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import {auth} from './firebase'
 import AuthLayout from "@/core/components/layout/AuthLayout/AuthLayout";
 import DefaultLayout from "@/core/components/layout/DefaultLayout/DefaultLayout";
+import PageNotFound from "@/core/components/not-found/PageNotFound";
 
 Vue.use(VueRouter);
 
@@ -21,6 +22,11 @@ const router = new VueRouter({
       component: DefaultLayout,
       children: [],
     },
+    {
+      path: '*',
+      component: PageNotFound,
+      children: []
+    }
   ]
 })
 

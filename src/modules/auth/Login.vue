@@ -32,6 +32,11 @@
 </template>
 
 <script>
+  import {createNamespacedHelpers} from 'vuex'
+  import * as firebase from 'firebase';
+
+  const {mapActions} = createNamespacedHelpers('global');
+
   export default {
     name: "Login",
     data() {
@@ -43,32 +48,21 @@
         }
       }
     },
-    computed: {
-      user() {
-        return this.$store.getters.user
-      },
-      loading() {
-        return this.$store.getters.loading
-      }
-    },
-    watch: {
-      user(value) {
-        if (value !== null && value !== undefined) {
-          this.$router.push('/');
-        }
-      },
-      loading(value) {
-        if (value !== null && value !== false) {
-          this.loader = true;
-        }
-      }
-    },
     methods: {
+      ...mapActions(['saveLoggedInUser']),
       actionLogin() {
         if (!this.loginForm.email || !this.loginForm.password) {
           console.log('error');
         }
-        this.$store.dispatch('actionLogin', this.loginForm);
+        firebase.auth().signInWithEmailAndPassword(this.loginForm.email, this.loginForm.password)
+        .then(
+          user => {
+            this.saveLoggedInUser(user);
+            this.$router.push('/');
+          }
+        ).catch(error => {
+          console.log(error);
+        })
       }
     }
   }

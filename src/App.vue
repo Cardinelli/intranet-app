@@ -19,10 +19,7 @@
   }
 
   #app {
-    display: flex;
-    flex-direction: row;
-    align-content: center;
-    background-color: #439093;
+    background-color: #EEF5F9 /* #222F3C; Dark: #292b2c */
   }
 
   .slide-enter-active {
