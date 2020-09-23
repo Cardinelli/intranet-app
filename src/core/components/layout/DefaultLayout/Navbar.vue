@@ -30,13 +30,13 @@
     </b-navbar>
 
     <div class="sidebar">
-      <div class="sidebar-button">
+      <div :class="this.$route.name === 'home' ? 'sidebar-button-active' : 'sidebar-button'">
         <router-link to="/"><i class="fas fa-tachometer-alt"></i> <span class="ml-2"> Dashboard </span></router-link>
       </div>
-      <div class="sidebar-button">
+      <div :class="this.$route.name === 'users' ? 'sidebar-button-active' : 'sidebar-button'">
         <router-link to="/users"><i class="fas fa-users"></i> <span class="ml-2"> Users </span></router-link>
       </div>
-      <div class="sidebar-button">
+      <div :class="this.$route.name === 'settings' ? 'sidebar-button-active' : 'sidebar-button'">
         <router-link to="/"><i class="fas fa-cog"></i> <span class="ml-2"> Settings </span></router-link>
       </div>
     </div>
@@ -97,6 +97,15 @@
 
     .sidebar-button {
       padding: 5px 0 5px 8px;
+      margin: 5px;
+      height: 35px;
+      color: #439093;
+    }
+
+    .sidebar-button-active {
+      padding: 5px 0 5px 8px;
+      border-left: 3px solid #EC407A;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
       margin: 5px;
       height: 35px;
       color: #439093;
