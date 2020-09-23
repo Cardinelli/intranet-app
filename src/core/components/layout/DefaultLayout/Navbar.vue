@@ -36,6 +36,9 @@
       <div :class="this.$route.name === 'users' ? 'sidebar-button-active' : 'sidebar-button'">
         <router-link to="/users"><i class="fas fa-users"></i> <span class="ml-2"> Users </span></router-link>
       </div>
+      <div :class="this.$route.name === 'topics' ? 'sidebar-button-active' : 'sidebar-button'">
+        <router-link to="/topics"><i class="fas fa-paste"></i> <span class="ml-2"> Topics </span></router-link>
+      </div>
       <div :class="this.$route.name === 'settings' ? 'sidebar-button-active' : 'sidebar-button'">
         <router-link to="/"><i class="fas fa-cog"></i> <span class="ml-2"> Settings </span></router-link>
       </div>
