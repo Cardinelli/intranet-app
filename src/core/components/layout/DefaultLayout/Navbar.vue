@@ -23,8 +23,7 @@
             <template v-slot:button-content v-if="currentUser">
               <em>{{currentUser.email}}</em>
             </template>
-            <b-dropdown-item href="#">Profile</b-dropdown-item>
-            <b-dropdown-item href="#">Sign Out</b-dropdown-item>
+            <b-dropdown-item @click="signOut()">Sign Out</b-dropdown-item>
           </b-nav-item-dropdown>
         </b-navbar-nav>
       </b-collapse>
@@ -45,6 +44,7 @@
 </template>
 
 <script>
+  import * as firebase from 'firebase'
   import {createNamespacedHelpers} from 'vuex'
 
   const {mapState} = createNamespacedHelpers('global');
@@ -55,6 +55,14 @@
       ...mapState({
         currentUser: state => state.currentUser,
       })
+    },
+    methods: {
+      signOut() {
+        firebase.auth().signOut()
+        .then(() => {
+          this.$router.push('/login')
+        })
+      }
     }
   }
 </script>
