@@ -26,7 +26,7 @@
           <b-form-input type="password" v-model="loginForm.password" id="password"></b-form-input>
         </b-form-group>
       </b-form-group>
-      <b-button @click="actionLogin()" variant="outline-success" size="sm">Login</b-button>
+      <b-button @click="actionLogin()" variant="outline-light" size="sm">Login</b-button>
     </b-card>
   </div>
 </template>
@@ -55,12 +55,12 @@
           console.log('error');
         }
         firebase.auth().signInWithEmailAndPassword(this.loginForm.email, this.loginForm.password)
-        .then(
-          user => {
-            this.saveLoggedInUser(user);
-            this.$router.push('/');
-          }
-        ).catch(error => {
+          .then(
+            user => {
+              this.saveLoggedInUser(user);
+              this.$router.push('/');
+            }
+          ).catch(error => {
           console.log(error);
         })
       }
@@ -68,13 +68,18 @@
   }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 
   .authentication-modal {
     display: flex;
     flex-direction: row;
     justify-content: space-around;
     align-content: center;
+    color: #439093;
+
+    .bg-light {
+      background-color: #222F3C !important;
+    }
   }
 
 </style>

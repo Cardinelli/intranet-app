@@ -4,24 +4,38 @@ export default {
   namespaced: true,
   state: {
     topics: [],
+    modal: {
+      show: false,
+      object: null,
+    }
   },
   actions: {
     getTopics({commit}) {
+      let data = [];
       firebase.firestore().collection('topics').get()
         .then(snap => {
-          let data = [];
-          let datum = {};
           snap.forEach(doc => {
-            datum = doc.data()
+            data.push(doc.data());
           })
-          data.push(datum);
-          commit('updateTopics', data);
         })
+      commit('updateTopics', data);
+    },
+    showModal({commit}) {
+      commit('showModal');
+    },
+    hideModal({commit}) {
+      commit('hideModal');
     }
   },
   mutations: {
     updateTopics(state, payload) {
       state.topics = payload;
+    },
+    showModal(state) {
+      state.modal.show = true;
+    },
+    hideModal(state) {
+      state.modal.show = false;
     }
   }
 }

@@ -6,17 +6,16 @@ export default {
     users: [],
   },
   actions: {
-    getUsersList({commit}) {
-      firebase.firestore().collection('users').get()
+    async getUsersList({commit}) {
+      let data = [];
+      await firebase.firestore().collection('users').get()
         .then(snap => {
-          let data = [];
-          let datum = {};
           snap.forEach(doc => {
-            datum = doc.data()
+            data.push(doc.data())
           })
-          data.push(datum);
-          commit('updateUsers', data);
         })
+      commit('updateUsers', data);
+
     }
   },
   mutations: {

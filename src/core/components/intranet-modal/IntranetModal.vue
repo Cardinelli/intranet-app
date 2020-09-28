@@ -1,64 +1,83 @@
 <template>
-  <div>
-    <b-modal id="modal-xl" size="xl" :title="title">
-      <b-form @reset="onReset" v-if="show">
-        <b-form-group
-          id="input-group-1"
-          label="Email address:"
-          label-for="input-1"
-          description="We'll never share your email with anyone else."
+  <b-modal ref="modal"
+           modal-class="intranet-modal"
+           :visible="visible"
+           :size="size"
+           :title="title"
+           :hide-footer="hideFooter"
+           no-enforce-focus
+           :scrollable="scrollable"
+           @show="onModalShow"
+           @shown="$emit('shown')"
+           @hide="beforeHide"
+           @hidden="onHidden">
+
+    <template v-slot:modal-footer>
+      <div class="w-100">
+        <p class="float-left">Modal Footer Content</p>
+        <b-button
+          variant="outline-success"
+          size="sm"
+          class="float-right mr-1 ml-1"
+          @click="onFormSubmit"
         >
-          <b-form-input
-            id="input-1"
-            v-model="form.email"
-            type="email"
-            required
-            placeholder="Enter email"
-          ></b-form-input>
-        </b-form-group>
+          Submit
+        </b-button>
+      </div>
+    </template>
 
-        <b-form-group id="input-group-2" label="Your Name:" label-for="input-2">
-          <b-form-input
-            id="input-2"
-            v-model="form.name"
-            required
-            placeholder="Enter name"
-          ></b-form-input>
-        </b-form-group>
+    <b-form>
+      <slot></slot>
+      <slot v-for="(_, name) in $slots" :name="name" :slot="name"/>
+      <button style="display:none"></button>
+    </b-form>
 
-        <b-form-group id="input-group-3" label="Food:" label-for="input-3">
-          <b-form-select
-            id="input-3"
-            v-model="form.food"
-            :options="foods"
-            required
-          ></b-form-select>
-        </b-form-group>
-
-        <b-form-group id="input-group-4">
-          <b-form-checkbox-group v-model="form.checked" id="checkboxes-4">
-            <b-form-checkbox value="me">Check me out</b-form-checkbox>
-            <b-form-checkbox value="that">Check that out</b-form-checkbox>
-          </b-form-checkbox-group>
-        </b-form-group>
-
-        <b-button type="submit" variant="primary">Submit</b-button>
-        <b-button type="reset" variant="danger">Reset</b-button>
-      </b-form>
-    </b-modal>
-  </div>
+  </b-modal>
 </template>
 
 <script>
-export default {
-name: "IntranetModal",
-  props: {
-    title: {
-      type: String,
-      default: null
+  export default {
+    name: "IntranetModal",
+    props: {
+      title: {
+        type: String,
+        default: null
+      },
+      size: {
+        type: String,
+        default: null
+      },
+      visible: {
+        type: Boolean,
+        default: false
+      },
+      hideFooter: {
+        type: Boolean,
+        default: true
+      },
+      scrollable: {
+        type: Boolean,
+        default: false
+      },
     },
+    methods: {
+      onModalShow() {
+        this.$emit('show', '');
+      },
+      beforeHide($event) {
+        this.$emit('hide', $event);
+      },
+      onFormSubmit($event) {
+        this.$emit('ok', $event)
+      },
+      onHidden() {
+        this.$emit('hidden');
+      },
+      hide() {
+        this.$refs.modal.hide();
+      }
+    }
   }
-}
 </script>
 
 <style scoped>
