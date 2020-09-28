@@ -7,9 +7,16 @@
       <b-card v-for="topic in topics" :key="topic.title"
               bg-variant="dark"
               text-variant="white"
+              img-width="200px"
+              img-height="300px"
+              :img-src="topic.img"
               :header="topic.title" class="text-center"
       >
-        <b-card-text>{{topic.description}}</b-card-text>
+        <b-card-body>
+          <b-card-text>
+            {{topic.description}}
+          </b-card-text>
+        </b-card-body>
       </b-card>
     </b-card-group>
     <topics-form-modal/>

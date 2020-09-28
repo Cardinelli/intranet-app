@@ -11,6 +11,9 @@
       <div class="col-md-6">
         <b-form-input id="input-none" v-model="model.title" placeholder="Title"></b-form-input>
       </div>
+      <div class="col-md-6">
+        <b-form-input id="input-none" v-model="model.img" placeholder="Img Src"></b-form-input>
+      </div>
     </div>
     <div class="row m-3">
       <div class="col-md-12">
@@ -40,6 +43,7 @@
       return {
         model: {
           title: '',
+          img: '',
           description: '',
         },
       }
@@ -61,17 +65,21 @@
         this.hideModal();
       },
       onSubmit() {
+        let today = new Date();
+        let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
         firebase.firestore().collection('topics').add({
           title: this.model.title,
           description: this.model.description,
-          created_at: '2020/20/20',
-          created_by: 'user1'
+          img: this.model.img,
+          created_at: time,
+          created_by: `users/${firebase.auth().currentUser.uid}`
         }).then(response => {
           if (response) {
             this.getTopics();
             this.hideModal();
             this.modal = {
               title: '',
+              img: '',
               description: '',
             }
           }

@@ -14,7 +14,6 @@
 
     <template v-slot:modal-footer>
       <div class="w-100">
-        <p class="float-left">Modal Footer Content</p>
         <b-button
           variant="outline-success"
           size="sm"
