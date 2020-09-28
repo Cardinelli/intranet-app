@@ -40,7 +40,7 @@
         <router-link to="/topics"><i class="fas fa-paste"></i> <span class="ml-2"> Topics </span></router-link>
       </div>
       <div :class="this.$route.name === 'settings' ? 'sidebar-button-active' : 'sidebar-button'">
-        <router-link to="/"><i class="fas fa-cog"></i> <span class="ml-2"> Settings </span></router-link>
+        <router-link to="/settings"><i class="fas fa-cog"></i> <span class="ml-2"> Settings </span></router-link>
       </div>
     </div>
   </div>
