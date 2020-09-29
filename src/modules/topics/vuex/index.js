@@ -7,6 +7,10 @@ export default {
     modal: {
       show: false,
       object: null,
+    },
+    commentModal: {
+      show: false,
+      object: null
     }
   },
   actions: {
@@ -25,7 +29,13 @@ export default {
     },
     hideModal({commit}) {
       commit('hideModal');
-    }
+    },
+    showCommentsModal({commit}) {
+      commit('showCommentsModal')
+    },
+    hideCommentsModal({commit}) {
+      commit('hideCommentsModal');
+    },
   },
   mutations: {
     updateTopics(state, payload) {
@@ -36,6 +46,12 @@ export default {
     },
     hideModal(state) {
       state.modal.show = false;
-    }
+    },
+    showCommentsModal(state) {
+      state.commentModal.show = true;
+    },
+    hideCommentsModal(state) {
+      state.commentModal.show = false;
+    },
   }
 }
