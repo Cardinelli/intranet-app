@@ -19,7 +19,7 @@
                       variant="outline-primary"
                       size="sm">
               <i class="far fa-comments"></i>
-              <span> - {{topic.title.length}} </span>
+              <span> - {{topic.commentCount}} </span>
             </b-button>
             <b-button @click="onViewClick(topic)" class="mr-2 ml-2" variant="outline-info" size="sm">View</b-button>
           </div>

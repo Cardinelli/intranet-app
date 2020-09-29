@@ -20,8 +20,13 @@ export default {
       let data = [];
       firebase.firestore().collection('topics').get()
         .then(snap => {
+          let dat
           snap.forEach(doc => {
-            let dat = {...doc.data(), id: doc.id};
+            dat = {...doc.data(), id: doc.id, commentCount: 0};
+            firebase.firestore().collection('comments').where('topic_id', '==', doc.id).get()
+              .then(snapshot => {
+                dat.commentCount = snapshot.docs.length
+              })
             data.push(dat);
           })
         })
@@ -66,6 +71,9 @@ export default {
     },
     updateComments(state, payload) {
       state.commentModal.comments = payload;
+    },
+    updateCommentsCount(state, payload) {
+      state.commentModal.count = payload;
     },
     showModal(state) {
       state.modal.show = true;
