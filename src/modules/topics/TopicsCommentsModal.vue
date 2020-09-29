@@ -18,7 +18,7 @@
             alt="placeholder"></b-img>
         </template>
 
-        <h5 class="mt-0">{{comment.created_by}}</h5>
+        <h6 class="mt-0">{{comment.created_by}}</h6>
         <p>
           {{comment.comment}}
         </p>
@@ -31,10 +31,12 @@
     <b-card-footer>
       <div class="row">
         <div class="col-md-10">
-          <b-form-textarea placeholder="Comment"></b-form-textarea>
+          <b-form-textarea v-model="commentModel.comment" placeholder="Comment"></b-form-textarea>
         </div>
         <div class="col-md-2">
-          <b-button class="mt-3" size="sm" variant="outline-primary"> Comment</b-button>
+          <b-button :disabled="commentModel.comment ? false : true" @click="writeComment" class="mt-3" size="sm"
+                    variant="outline-primary"> Comment
+          </b-button>
         </div>
       </div>
     </b-card-footer>
@@ -43,25 +45,50 @@
 
 <script>
   import IntranetModal from "@/core/components/intranet-modal/IntranetModal";
+  import firebase from 'firebase'
   import {createNamespacedHelpers} from 'vuex'
 
   const {mapState, mapActions} = createNamespacedHelpers('topics')
   export default {
     name: "TopicsCommentsModal",
     components: {IntranetModal},
+    data() {
+      return {
+        commentModel: {
+          comment: '',
+        }
+      }
+    },
     computed: {
       ...mapState({
         modal: state => state.commentModal,
-        comments: state => state.commentModal.comments
+        comments: state => state.commentModal.comments,
+        topicId: state => state.commentModal.topicId
       })
     },
     methods: {
-      ...mapActions(['hideCommentsModal']),
+      ...mapActions(['hideCommentsModal', 'getComments']),
       Hide() {
         this.hideCommentsModal();
       },
-      onSubmit() {
-        console.log(11111);
+      writeComment() {
+        let today = new Date();
+        let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+        firebase.firestore().collection('comments').add({
+          comment: this.commentModel.comment,
+          created_at: time,
+          created_by: firebase.auth().currentUser.uid,
+          topic_id: this.topicId
+        }).then(response => {
+          if (response) {
+            this.getComments();
+            this.commentModel = {
+              comment: '',
+            }
+          }
+        }).catch(error => {
+          console.log(error);
+        })
       }
     }
   }

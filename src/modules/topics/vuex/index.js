@@ -9,6 +9,7 @@ export default {
       object: null,
     },
     commentModal: {
+      topicId: '',
       comments: [],
       show: false,
       object: null
@@ -32,9 +33,18 @@ export default {
     hideModal({commit}) {
       commit('hideModal');
     },
-    showCommentsModal({commit}, payload) {
+    showCommentsModal({dispatch, state, commit}, payload) {
+      commit('showCommentsModal', payload);
+      dispatch('getComments', state.commentModal.topicId);
+    },
+    hideCommentsModal({commit}) {
+      commit('hideCommentsModal');
+    },
+    getComments({commit, state}, payload) {
+      let param
+      payload ? param = payload : param = state.commentModal.topicId
       let data = [];
-      firebase.firestore().collection('comments').where('topic_id', '==', payload).get()
+      firebase.firestore().collection('comments').where('topic_id', '==', param).get()
         .then(response => {
           response.forEach(doc => {
             let dat = {...doc.data(), id: doc.id};
@@ -47,15 +57,15 @@ export default {
             data.push(dat);
           })
         })
-      commit('showCommentsModal', data)
-    },
-    hideCommentsModal({commit}) {
-      commit('hideCommentsModal');
-    },
+      commit('updateComments', data)
+    }
   },
   mutations: {
     updateTopics(state, payload) {
       state.topics = payload;
+    },
+    updateComments(state, payload) {
+      state.commentModal.comments = payload;
     },
     showModal(state) {
       state.modal.show = true;
@@ -64,7 +74,7 @@ export default {
       state.modal.show = false;
     },
     showCommentsModal(state, payload) {
-      state.commentModal.comments = payload;
+      state.commentModal.topicId = payload
       state.commentModal.show = true;
     },
     hideCommentsModal(state) {
