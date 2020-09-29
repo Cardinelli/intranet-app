@@ -8,35 +8,24 @@
     :hide-footer="true"
     :scrollable="true"
   >
-    <b-card>
-      <b-media>
+    <b-card v-if="comments.length > 0">
+      <b-media v-for="comment in comments" :key="comment.id">
         <template v-slot:aside>
-          <b-img src="https://www.iconfinder.com/data/icons/web-mobile-2-1/64/user_avatar_admin_web_mobile_business_office-512.png" blank blank-color="#ccc" width="64" alt="placeholder"></b-img>
+          <b-img
+            src="https://www.iconfinder.com/data/icons/web-mobile-2-1/64/user_avatar_admin_web_mobile_business_office-512.png"
+            width="45px"
+            height="45px"
+            alt="placeholder"></b-img>
         </template>
 
-        <h5 class="mt-0">Media Title</h5>
+        <h5 class="mt-0">{{comment.created_by}}</h5>
         <p>
-          Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin.
-          Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc
-          ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
+          {{comment.comment}}
         </p>
-        <p>
-          Donec sed odio dui. Nullam quis risus eget urna mollis ornare vel eu leo. Cum sociis natoque
-          penatibus et magnis dis parturient montes, nascetur ridiculus mus.
-        </p>
-
-        <b-media>
-          <template v-slot:aside>
-            <b-img blank blank-color="#ccc" width="64" alt="placeholder"></b-img>
-          </template>
-
-          <h5 class="mt-0">Nested Media</h5>
-          <p class="mb-0">
-            Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in
-            faucibus.
-          </p>
-        </b-media>
       </b-media>
+    </b-card>
+    <b-card v-else>
+      <h6 class="text-center"> Be the first one who will comment </h6>
     </b-card>
 
     <b-card-footer>
@@ -62,7 +51,8 @@
     components: {IntranetModal},
     computed: {
       ...mapState({
-        modal: state => state.commentModal
+        modal: state => state.commentModal,
+        comments: state => state.commentModal.comments
       })
     },
     methods: {

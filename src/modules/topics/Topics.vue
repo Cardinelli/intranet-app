@@ -15,7 +15,7 @@
         <b-card-body class="pt-0 pb-4">
           <div class="actions">
             <b-button class="mr-2 ml-2"
-                      @click="showCommentsModal"
+                      @click="showCommentsModal(topic.id)"
                       variant="outline-primary"
                       size="sm">
               <i class="far fa-comments"></i>

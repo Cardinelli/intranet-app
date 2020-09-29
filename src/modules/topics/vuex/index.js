@@ -9,6 +9,7 @@ export default {
       object: null,
     },
     commentModal: {
+      comments: [],
       show: false,
       object: null
     }
@@ -31,8 +32,22 @@ export default {
     hideModal({commit}) {
       commit('hideModal');
     },
-    showCommentsModal({commit}) {
-      commit('showCommentsModal')
+    showCommentsModal({commit}, payload) {
+      let data = [];
+      firebase.firestore().collection('comments').where('topic_id', '==', payload).get()
+        .then(response => {
+          response.forEach(doc => {
+            let dat = {...doc.data(), id: doc.id};
+            firebase.firestore().collection('users').where('__name__', '==', dat.created_by).get()
+              .then(resp => {
+                resp.forEach(res => {
+                  dat.created_by = res.data().name + ' ' + res.data().surname;
+                })
+              })
+            data.push(dat);
+          })
+        })
+      commit('showCommentsModal', data)
     },
     hideCommentsModal({commit}) {
       commit('hideCommentsModal');
@@ -48,7 +63,8 @@ export default {
     hideModal(state) {
       state.modal.show = false;
     },
-    showCommentsModal(state) {
+    showCommentsModal(state, payload) {
+      state.commentModal.comments = payload;
       state.commentModal.show = true;
     },
     hideCommentsModal(state) {

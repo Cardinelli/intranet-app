@@ -34,17 +34,4 @@ tmpRoutes.forEach((obj) => {
   route.children.push(obj);
 })
 
-// route.children.push({path: '', component: Topics, meta: {guest: true}});
-
-
-// route.children.push({
-//   path: 'topics',
-//   name: 'topics',
-//   component: Topics,
-//   alias: '/topics',
-//   meta: {
-//     guest: true
-//   }
-// });
-
 router.addRoutes([route]);
