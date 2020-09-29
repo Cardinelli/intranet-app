@@ -3,8 +3,7 @@
     :title="'Comments'"
     :visible="modal.show"
     :size="'lg'"
-    @ok.prevent="onSubmit"
-    @hidden="hideCommentsModal"
+    @hidden="Hide"
     :hide-footer="true"
     :scrollable="true"
   >
@@ -70,6 +69,7 @@
       ...mapActions(['hideCommentsModal', 'getComments']),
       Hide() {
         this.hideCommentsModal();
+        this.commentModel.comment = '';
       },
       writeComment() {
         let today = new Date();
