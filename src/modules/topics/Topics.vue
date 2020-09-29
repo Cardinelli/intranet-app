@@ -22,6 +22,9 @@
               <span> - {{topic.commentCount}} </span>
             </b-button>
             <b-button @click="onViewClick(topic)" class="mr-2 ml-2" variant="outline-info" size="sm">View</b-button>
+            <b-button v-if="topic.created_by === currentUser" @click="onDeleteClick(topic.id)" class="mr-2 ml-2"
+                      variant="outline-danger" size="sm">Delete
+            </b-button>
           </div>
         </b-card-body>
       </b-card>
@@ -35,12 +38,18 @@
   import {createNamespacedHelpers} from 'vuex'
   import TopicsFormModal from "@/modules/topics/TopicsFormModal";
   import TopicsCommentsModal from "@/modules/topics/TopicsCommentsModal";
+  import firebase from 'firebase'
 
   const {mapState, mapActions} = createNamespacedHelpers('topics');
 
   export default {
     name: "Topics",
     components: {TopicsCommentsModal, TopicsFormModal},
+    data() {
+      return {
+        currentUser: ''
+      }
+    },
     computed: {
       ...mapState({
         topics: state => state.topics
@@ -53,9 +62,19 @@
           name: 'topics.view',
           params: {id: topic.id, topic: topic}
         })
+      },
+      onDeleteClick(id) {
+        firebase.firestore().collection('topics').where('__name__', '==', id).get()
+        .then(response => {
+          response.forEach(doc => {
+            doc.ref.delete();
+          })
+          this.getTopics();
+        })
       }
     },
     beforeMount() {
+      this.currentUser = localStorage.getItem('user');
       this.getTopics();
     },
     showModal() {

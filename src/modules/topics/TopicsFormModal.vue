@@ -72,7 +72,7 @@
           description: this.model.description,
           img: this.model.img,
           created_at: time,
-          created_by: `users/${firebase.auth().currentUser.uid}`
+          created_by: firebase.auth().currentUser.uid
         }).then(response => {
           if (response) {
             this.getTopics();

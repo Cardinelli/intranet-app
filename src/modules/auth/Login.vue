@@ -57,6 +57,7 @@
         firebase.auth().signInWithEmailAndPassword(this.loginForm.email, this.loginForm.password)
           .then(
             user => {
+              localStorage.setItem('user', user.user.uid)
               this.saveLoggedInUser(user);
               this.$router.push('/');
             }
