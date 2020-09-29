@@ -20,7 +20,7 @@
               <i class="far fa-comments"></i>
               <span> - {{topic.title.length}} </span>
             </b-button>
-            <b-button class="mr-2 ml-2" variant="outline-info" size="sm">View</b-button>
+            <b-button @click="onViewClick(topic)" class="mr-2 ml-2" variant="outline-info" size="sm">View</b-button>
           </div>
         </b-card-body>
 
@@ -70,7 +70,13 @@
       })
     },
     methods: {
-      ...mapActions(['getTopics', 'showModal'])
+      ...mapActions(['getTopics', 'showModal']),
+      onViewClick(topic) {
+        this.$router.push({
+          name: 'topics.view',
+          params: {id: topic.title, topic: topic}
+        })
+      }
     },
     beforeMount() {
       this.getTopics();
