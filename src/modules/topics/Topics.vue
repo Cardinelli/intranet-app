@@ -51,7 +51,7 @@
       onViewClick(topic) {
         this.$router.push({
           name: 'topics.view',
-          params: {id: topic.title, topic: topic}
+          params: {id: topic.id, topic: topic}
         })
       }
     },

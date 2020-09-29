@@ -19,7 +19,8 @@ export default {
       firebase.firestore().collection('topics').get()
         .then(snap => {
           snap.forEach(doc => {
-            data.push(doc.data());
+            let dat = {...doc.data(), id: doc.id};
+            data.push(dat);
           })
         })
       commit('updateTopics', data);

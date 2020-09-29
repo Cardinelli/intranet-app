@@ -11,7 +11,7 @@
     <b-card>
       <b-media>
         <template v-slot:aside>
-          <b-img blank blank-color="#ccc" width="64" alt="placeholder"></b-img>
+          <b-img src="https://www.iconfinder.com/data/icons/web-mobile-2-1/64/user_avatar_admin_web_mobile_business_office-512.png" blank blank-color="#ccc" width="64" alt="placeholder"></b-img>
         </template>
 
         <h5 class="mt-0">Media Title</h5>
