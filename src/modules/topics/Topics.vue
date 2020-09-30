@@ -68,6 +68,12 @@
         .then(response => {
           response.forEach(doc => {
             doc.ref.delete();
+            this.$bvToast.toast('Topic was deleted successfully', {
+              title: 'Success',
+              autoHideDelay: 5000,
+              variant: 'success',
+              appendToast: false
+            })
           })
           this.getTopics();
         })
