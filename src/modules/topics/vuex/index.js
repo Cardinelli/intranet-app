@@ -52,11 +52,11 @@ export default {
       firebase.firestore().collection('comments').where('topic_id', '==', param).get()
         .then(response => {
           response.forEach(doc => {
-            let dat = {...doc.data(), id: doc.id};
+            let dat = {...doc.data(), id: doc.id, display_name: ''};
             firebase.firestore().collection('users').where('__name__', '==', dat.created_by).get()
               .then(resp => {
                 resp.forEach(res => {
-                  dat.created_by = res.data().name + ' ' + res.data().surname;
+                  dat.display_name = res.data().name + ' ' + res.data().surname;
                 })
               })
             data.push(dat);

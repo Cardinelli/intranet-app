@@ -17,10 +17,20 @@
             alt="placeholder"></b-img>
         </template>
 
-        <h6 class="mt-0">{{comment.created_by}}</h6>
-        <p>
-          {{comment.comment}}
-        </p>
+        <div class="actions mb-2">
+          <b-button v-if="comment.created_by === currentUser" @click="removeComment(comment.id)"
+                    class="ml-1 mr-1 float-right" size="sm" variant="outline-danger"><i class="fas fa-trash-alt"></i>
+          </b-button>
+          <b-button v-if="comment.created_by === currentUser" class="ml-1 mr-1 float-right" size="sm"
+                    variant="outline-info"><i class="fas fa-pencil-alt"></i>
+          </b-button>
+        </div>
+        <div class="details">
+          <h6 class="mt-0">{{comment.display_name}}</h6>
+          <p>
+            {{comment.comment}}
+          </p>
+        </div>
       </b-media>
     </b-card>
     <b-card v-else>
@@ -53,6 +63,7 @@
     components: {IntranetModal},
     data() {
       return {
+        currentUser: '',
         commentModel: {
           comment: '',
         }
@@ -64,6 +75,9 @@
         comments: state => state.commentModal.comments,
         topicId: state => state.commentModal.topicId
       })
+    },
+    beforeMount() {
+      this.currentUser = localStorage.getItem('user');
     },
     methods: {
       ...mapActions(['hideCommentsModal', 'getComments']),
@@ -89,6 +103,15 @@
         }).catch(error => {
           console.log(error);
         })
+      },
+      removeComment(id) {
+        firebase.firestore().collection('comments').where('__name__', '==', id).get()
+          .then(response => {
+            response.forEach(doc => {
+              doc.ref.delete()
+            })
+            this.getComments();
+          })
       }
     }
   }
