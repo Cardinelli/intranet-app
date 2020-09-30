@@ -9,17 +9,17 @@
   >
     <div class="row m-3">
       <div class="col-md-6">
-        <b-form-input id="input-none" v-model="model.title" placeholder="Title"></b-form-input>
+        <b-form-input id="input-none" v-model="modal.model.title" placeholder="Title"></b-form-input>
       </div>
       <div class="col-md-6">
-        <b-form-input id="input-none" v-model="model.img" placeholder="Img Src"></b-form-input>
+        <b-form-input id="input-none" v-model="modal.model.img" placeholder="Img Src"></b-form-input>
       </div>
     </div>
     <div class="row m-3">
       <div class="col-md-12">
         <b-form-textarea
           id="textarea"
-          v-model="model.description"
+          v-model="modal.model.description"
           placeholder="Description"
           rows="3"
           max-rows="6"
@@ -39,15 +39,6 @@
   export default {
     name: "TopicsFormModal",
     components: {IntranetModal},
-    data() {
-      return {
-        model: {
-          title: '',
-          img: '',
-          description: '',
-        },
-      }
-    },
     computed: {
       ...mapState({
         modal: state => state.modal
@@ -67,25 +58,44 @@
       onSubmit() {
         let today = new Date();
         let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-        firebase.firestore().collection('topics').add({
-          title: this.model.title,
-          description: this.model.description,
-          img: this.model.img,
-          created_at: time,
-          created_by: firebase.auth().currentUser.uid
-        }).then(response => {
-          if (response) {
-            this.getTopics();
-            this.hideModal();
-            this.modal = {
-              title: '',
-              img: '',
-              description: '',
+        if (!this.modal.model) {
+          firebase.firestore().collection('topics').add({
+            title: this.modal.model.title,
+            description: this.modal.model.description,
+            img: this.modal.model.img,
+            created_at: time,
+            created_by: firebase.auth().currentUser.uid
+          }).then(response => {
+            if (response) {
+              this.getTopics();
+              this.hideModal();
             }
-          }
-        }).catch(error => {
-          console.log(error);
-        })
+          }).catch(error => {
+            console.log(error);
+          })
+        } else {
+          firebase.firestore().collection('topics').doc(this.modal.model.id).update({
+            title: this.modal.model.title,
+            description: this.modal.model.description,
+            img: this.modal.model.img,
+          }).then(response => {
+            this.hideModal();
+            this.$bvToast.toast('Topic was updated successfully', {
+              title: 'Success',
+              autoHideDelay: 5000,
+              variant: 'success',
+              appendToast: false
+            })
+            return response
+          }).catch(error => {
+            this.$bvToast.toast(error, {
+              title: 'Someting went wrong',
+              autoHideDelay: 5000,
+              variant: 'danger',
+              appendToast: false
+            })
+          })
+        }
       }
     }
   }

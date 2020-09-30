@@ -6,7 +6,7 @@ export default {
     topics: [],
     modal: {
       show: false,
-      object: null,
+      model: {},
     },
     commentModal: {
       topicId: '',
@@ -32,8 +32,8 @@ export default {
         })
       commit('updateTopics', data);
     },
-    showModal({commit}) {
-      commit('showModal');
+    showModal({commit}, payload = {}) {
+      commit('showModal', payload);
     },
     hideModal({commit}) {
       commit('hideModal');
@@ -75,11 +75,13 @@ export default {
     updateCommentsCount(state, payload) {
       state.commentModal.count = payload;
     },
-    showModal(state) {
+    showModal(state, payload) {
       state.modal.show = true;
+      state.modal.model = payload;
     },
     hideModal(state) {
       state.modal.show = false;
+      state.modal.model = {};
     },
     showCommentsModal(state, payload) {
       state.commentModal.topicId = payload

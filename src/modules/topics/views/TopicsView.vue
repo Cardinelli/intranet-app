@@ -1,7 +1,9 @@
 <template>
   <div class="topics-view">
     <div class="go-back mb-3">
-      <b-button @click="goBack" variant="outline-info" size="sm"><i class="fas fa-arrow-left"></i> Back</b-button>
+      <b-button class="ml-1 mr-1" @click="goBack" variant="outline-info" size="sm"><i class="fas fa-arrow-left"></i>
+        Back
+      </b-button>
     </div>
 
     <b-card bg-variant="dark" text-variant="white" :title="topic.title">
@@ -11,6 +13,13 @@
       </b-card-text>
       <b-card-footer>
         {{topic.created_at}}
+        <b-button v-if="topic.created_by === currentUser"
+                  class="ml-1 mr-1 float-right"
+                  @click="updateTopic(topic)"
+                  variant="outline-info" size="sm">
+          <i class="fas fa-pencil-alt"></i>
+          Edit
+        </b-button>
         <b-button class="mr-2 ml-2 float-right"
                   @click="showCommentsModal(topic.id)"
                   variant="outline-primary"
@@ -20,6 +29,7 @@
         </b-button>
       </b-card-footer>
     </b-card>
+    <topics-form-modal/>
     <topics-comments-modal/>
   </div>
 </template>
@@ -27,16 +37,18 @@
 <script>
   import {createNamespacedHelpers} from 'vuex'
   import TopicsCommentsModal from "@/modules/topics/TopicsCommentsModal";
+  import TopicsFormModal from "@/modules/topics/TopicsFormModal";
 
   const {mapState, mapActions} = createNamespacedHelpers('topics');
 
 
   export default {
     name: "TopicsView",
-    components: {TopicsCommentsModal},
+    components: {TopicsFormModal, TopicsCommentsModal},
     data() {
       return {
-        topic: {}
+        topic: {},
+        currentUser: ''
       }
     },
     computed: {
@@ -48,10 +60,14 @@
       ...mapActions(['getTopics', 'showModal', 'showCommentsModal']),
       goBack() {
         this.$router.go(-1);
+      },
+      updateTopic(topic) {
+        this.showModal(topic)
       }
     },
     beforeMount() {
       this.topic = this.$route.params.topic;
+      this.currentUser = localStorage.getItem('user');
       this.getTopics();
     }
   }
