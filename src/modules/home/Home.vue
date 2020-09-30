@@ -28,21 +28,33 @@
               <p class="text-uppercase mar-btm text-sm">New Topics</p>
               <i class="fas fa-paste fa-5x"></i>
               <hr>
-              <p class="h2 text-thin">{{topics}}</p>
+              <p class="h2 text-thin">{{topicsCount}}</p>
             </div>
           </div>
         </div>
         <div class="col-md-3 col-sm-6 col-xs-12">
           <div class="panel panel-info panel-colorful">
             <div class="panel-body text-center">
-              <p class="text-uppercase mar-btm text-sm">Earning</p>
-              <i class="fa fa-dollar fa-5x"></i>
+              <p class="text-uppercase mar-btm text-sm">Activities</p>
+              <i class="fas fa-chart-line fa-5x"></i>
               <hr>
-              <p class="h2 text-thin">7,428</p>
+              <p class="h2 text-thin">{{topicsCount + comments + activeUsers}}</p>
             </div>
           </div>
         </div>
       </div>
+    </div>
+    <div class="latest-news">
+      <b-card bg-variant="dark" text-variant="white" :title="`Latest Topics - ${latestTopic.title}`">
+        <b-card-text>
+          {{latestTopic.description}}
+        </b-card-text>
+        <b-card-footer>
+          {{latestTopic.created_at}}
+          <b-button @click="onViewClick()" class="mr-2 ml-2 float-right" variant="outline-info" size="sm">Read More
+          </b-button>
+        </b-card-footer>
+      </b-card>
     </div>
   </div>
 </template>
@@ -59,13 +71,20 @@
       return {}
     },
     methods: {
-      ...mapActions(['initializeDashboardData'])
+      ...mapActions(['initializeDashboardData']),
+      onViewClick() {
+        this.$router.push({
+          name: 'topics.view',
+          params: {id: this.latestTopic.id, topic: this.latestTopic}
+        })
+      },
     },
     computed: {
       ...mapState({
         activeUsers: state => state.activeUsers,
-        topics: state => state.topics,
-        comments: state => state.comments
+        topicsCount: state => state.topicsCount,
+        comments: state => state.comments,
+        latestTopic: state => state.latestTopic
       })
     },
     beforeMount() {
@@ -80,6 +99,10 @@
     width: 59%;
     margin-left: 25%;
     margin-top: 5%;
+  }
+
+  .bg-dark {
+    background-color: #222F3C !important;
   }
 
   .panel {
