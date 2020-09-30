@@ -62,7 +62,12 @@
               this.$router.push('/');
             }
           ).catch(error => {
-          console.log(error);
+          this.$bvToast.toast(error.message, {
+            title: error.code,
+            autoHideDelay: 5000,
+            variant: 'danger',
+            appendToast: false
+          })
         })
       }
     }
