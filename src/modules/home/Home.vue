@@ -26,7 +26,7 @@
           <div class="panel panel-primary panel-colorful">
             <div class="panel-body text-center">
               <p class="text-uppercase mar-btm text-sm">New Topics</p>
-              <i class="fa fa-shopping-cart fa-5x"></i>
+              <i class="fas fa-paste fa-5x"></i>
               <hr>
               <p class="h2 text-thin">{{topics}}</p>
             </div>
