@@ -64,7 +64,7 @@
     margin-left: 25%;
     margin-top: 1.5%;
 
-    .bg-info {
+    .bg-dark {
       background-color: #222F3C !important;
     }
   }
