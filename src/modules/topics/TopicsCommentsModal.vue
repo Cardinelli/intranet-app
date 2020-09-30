@@ -109,6 +109,12 @@
           .then(response => {
             response.forEach(doc => {
               doc.ref.delete()
+              this.$bvToast.toast('Comment was deleted successfully', {
+                title: 'Success',
+                autoHideDelay: 5000,
+                variant: 'success',
+                appendToast: false
+              })
             })
             this.getComments();
           })
