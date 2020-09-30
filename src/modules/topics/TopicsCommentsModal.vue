@@ -21,15 +21,14 @@
           <b-button v-if="comment.created_by === currentUser" @click="removeComment(comment.id)"
                     class="ml-1 mr-1 float-right" size="sm" variant="outline-danger"><i class="fas fa-trash-alt"></i>
           </b-button>
-          <b-button v-if="comment.created_by === currentUser" class="ml-1 mr-1 float-right" size="sm"
+          <b-button v-if="comment.created_by === currentUser" @click="updateComment(comment)"
+                    class="ml-1 mr-1 float-right" size="sm"
                     variant="outline-info"><i class="fas fa-pencil-alt"></i>
           </b-button>
         </div>
         <div class="details">
           <h6 class="mt-0">{{comment.display_name}}</h6>
-          <p>
-            {{comment.comment}}
-          </p>
+          <b-form-textarea :id="`comment-update-${comment.id}`" class="mb-2" disabled rows="4" v-model="comment.comment"/>
         </div>
       </b-media>
     </b-card>
@@ -104,6 +103,31 @@
           console.log(error);
         })
       },
+      updateComment(comment) {
+        let textArea = document.getElementById(`comment-update-${comment.id}`);
+        textArea.disabled = false;
+        textArea.addEventListener("keyup", (ev => {
+          if (ev.keyCode === 13) {
+            ev.preventDefault();
+            textArea.disabled = true;
+            firebase.firestore().collection('comments').doc(comment.id).update({
+              comment: comment.comment
+            }).then(response => {
+              textArea.style.overflow = 'hidden';
+              this.$bvToast.toast('Comment was updated successfully', {
+                title: 'Success',
+                autoHideDelay: 5000,
+                variant: 'success',
+                appendToast: false
+              })
+              return response
+            }).catch(error => {
+              console.log(error);
+            })
+          }
+        }))
+
+      },
       removeComment(id) {
         firebase.firestore().collection('comments').where('__name__', '==', id).get()
           .then(response => {
@@ -124,5 +148,10 @@
 </script>
 
 <style lang="scss" scoped>
+
+  .form-control:disabled, .form-control[readonly] {
+    background-color: transparent !important;
+    border: none;
+  }
 
 </style>
