@@ -28,7 +28,8 @@
         </div>
         <div class="details">
           <h6 class="mt-0">{{comment.display_name}}</h6>
-          <b-form-textarea :id="`comment-update-${comment.id}`" class="mb-2" disabled rows="4" v-model="comment.comment"/>
+          <b-form-textarea :id="`comment-update-${comment.id}`" class="update-textarea mb-2" disabled rows="4"
+                           v-model="comment.comment"/>
         </div>
       </b-media>
     </b-card>
@@ -113,7 +114,6 @@
             firebase.firestore().collection('comments').doc(comment.id).update({
               comment: comment.comment
             }).then(response => {
-              textArea.style.overflow = 'hidden';
               this.$bvToast.toast('Comment was updated successfully', {
                 title: 'Success',
                 autoHideDelay: 5000,
@@ -148,6 +148,10 @@
 </script>
 
 <style lang="scss" scoped>
+
+  .update-textarea {
+    overflow: hidden;
+  }
 
   .form-control:disabled, .form-control[readonly] {
     background-color: transparent !important;
