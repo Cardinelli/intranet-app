@@ -96,7 +96,7 @@ export default {
     },
     showModal(state, payload) {
       state.modal.show = true;
-      state.modal.model = payload;
+      state.modal.model = {...payload};
     },
     hideModal(state) {
       state.modal.show = false;

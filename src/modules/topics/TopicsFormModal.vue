@@ -46,7 +46,7 @@
       })
     },
     methods: {
-      ...mapActions(['getTopics', 'hideModal']),
+      ...mapActions(['getTopics', 'hideModal', 'getTopic']),
       Hide() {
         this.hideModal();
       },
@@ -74,6 +74,7 @@
             description: this.model.description,
             img: this.model.img,
           }).then(response => {
+            this.getTopic(this.model.id);
             this.hideModal();
             this.$bvToast.toast('Topic was updated successfully', {
               title: 'Success',
