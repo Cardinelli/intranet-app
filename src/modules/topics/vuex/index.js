@@ -4,6 +4,7 @@ export default {
   namespaced: true,
   state: {
     topics: [],
+    topic: {},
     modal: {
       show: false,
       model: {},
@@ -31,6 +32,12 @@ export default {
           })
         })
       commit('updateTopics', data);
+    },
+    getTopic({commit}, payload) {
+      firebase.firestore().collection('topics').doc(payload).get()
+        .then(snap => {
+          commit('updateTopic', snap.data())
+        })
     },
     showModal({commit}, payload = {}) {
       commit('showModal', payload);
@@ -68,6 +75,9 @@ export default {
   mutations: {
     updateTopics(state, payload) {
       state.topics = payload;
+    },
+    updateTopic(state, payload) {
+      state.topic = payload;
     },
     updateComments(state, payload) {
       state.commentModal.comments = payload;

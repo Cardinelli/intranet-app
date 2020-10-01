@@ -47,17 +47,16 @@
     components: {TopicsFormModal, TopicsCommentsModal},
     data() {
       return {
-        topic: {},
         currentUser: ''
       }
     },
     computed: {
       ...mapState({
-        topics: state => state.topics
+        topic: state => state.topic
       })
     },
     methods: {
-      ...mapActions(['getTopics', 'showModal', 'showCommentsModal']),
+      ...mapActions(['getTopic', 'showModal', 'showCommentsModal']),
       goBack() {
         this.$router.go(-1);
       },
@@ -66,9 +65,8 @@
       }
     },
     beforeMount() {
-      this.topic = this.$route.params.topic;
       this.currentUser = localStorage.getItem('user');
-      this.getTopics();
+      this.getTopic(this.$route.params.id);
     }
   }
 </script>
