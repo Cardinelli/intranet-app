@@ -70,6 +70,14 @@
         firebase.firestore().collection('topics').where('__name__', '==', id).get()
           .then(response => {
             response.forEach(doc => {
+              firebase.firestore().collection('comments').where('topic_id', '==', doc.id).get()
+                .then(resp => {
+                  resp.forEach(cdoc => {
+                    cdoc.ref.delete();
+                  })
+                }).catch(err => {
+                return err;
+              })
               doc.ref.delete();
               this.$bvToast.toast('Topic was deleted successfully', {
                 title: 'Success',

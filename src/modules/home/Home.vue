@@ -48,7 +48,7 @@
       <b-card v-if="latestTopic.title" bg-variant="dark" text-variant="white"
               :title="`Latest Topics - ${latestTopic.title}`">
         <b-card-text v-if="latestTopic.description">
-          {{latestTopic.description.substring(1, 200) + ' ' + '........'}}
+          {{latestTopic.description.substring(0, 200) + ' ' + '........'}}
         </b-card-text>
         <b-card-footer>
           {{latestTopic.created_at}}

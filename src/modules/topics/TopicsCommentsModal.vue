@@ -95,6 +95,12 @@
           topic_id: this.topicId
         }).then(response => {
           if (response) {
+            this.$bvToast.toast('Comment was created successfully', {
+              title: 'Success',
+              autoHideDelay: 5000,
+              variant: 'success',
+              appendToast: false
+            })
             this.getComments();
             this.getTopics();
             this.commentModel = {
@@ -144,6 +150,7 @@
               })
             })
             this.getComments();
+            this.getTopics();
           })
       }
     }
