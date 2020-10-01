@@ -28,7 +28,7 @@
         </div>
         <div class="details">
           <h6 class="mt-0">{{comment.display_name}}</h6>
-          <b-form-textarea :id="`comment-update-${comment.id}`" class="update-textarea mb-2" disabled rows="4"
+          <b-form-textarea :id="`comment-update-${comment.id}`" class="update-textarea mb-2" disabled
                            v-model="comment.comment"/>
         </div>
       </b-media>
@@ -108,6 +108,7 @@
       updateComment(comment) {
         let textArea = document.getElementById(`comment-update-${comment.id}`);
         textArea.disabled = false;
+        textArea.style.overflowY = 'scroll'
         textArea.addEventListener("keyup", (ev => {
           if (ev.keyCode === 13) {
             ev.preventDefault();
@@ -115,6 +116,7 @@
             firebase.firestore().collection('comments').doc(comment.id).update({
               comment: comment.comment
             }).then(response => {
+              textArea.style.overflowY = 'hidden'
               this.$bvToast.toast('Comment was updated successfully', {
                 title: 'Success',
                 autoHideDelay: 5000,
@@ -157,6 +159,22 @@
   .form-control:disabled, .form-control[readonly] {
     background-color: transparent !important;
     border: none;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #888;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #222F3C;
   }
 
 </style>
