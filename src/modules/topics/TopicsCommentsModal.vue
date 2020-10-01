@@ -80,7 +80,7 @@
       this.currentUser = localStorage.getItem('user');
     },
     methods: {
-      ...mapActions(['hideCommentsModal', 'getComments']),
+      ...mapActions(['hideCommentsModal', 'getComments', 'getTopics']),
       Hide() {
         this.hideCommentsModal();
         this.commentModel.comment = '';
@@ -96,6 +96,7 @@
         }).then(response => {
           if (response) {
             this.getComments();
+            this.getTopics();
             this.commentModel = {
               comment: '',
             }

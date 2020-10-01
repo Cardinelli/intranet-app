@@ -21,13 +21,15 @@ export default {
       let data = [];
       firebase.firestore().collection('topics').get()
         .then(snap => {
-          let dat
           snap.forEach(doc => {
+            let dat
             dat = {...doc.data(), id: doc.id, commentCount: 0};
             firebase.firestore().collection('comments').where('topic_id', '==', doc.id).get()
               .then(snapshot => {
                 dat.commentCount = snapshot.docs.length
-              })
+              }).catch(error => {
+                console.log(error, 'errr');
+            })
             data.push(dat);
           })
         })
@@ -36,7 +38,14 @@ export default {
     getTopic({commit}, payload) {
       firebase.firestore().collection('topics').doc(payload).get()
         .then(snap => {
-          commit('updateTopic', snap.data())
+          let data = {...snap.data(), commentCount: 0};
+          firebase.firestore().collection('comments').where('topic_id', '==', snap.id).get()
+            .then(snapshot => {
+              data.commentCount = snapshot.docs.length
+            }).catch(error => {
+            console.log(error, 'errr');
+          })
+          commit('updateTopic', data)
         })
     },
     showModal({commit}, payload = {}) {
