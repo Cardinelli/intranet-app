@@ -78,7 +78,11 @@
                 appendToast: false
               })
             })
-            this.getTopics();
+            this.topics.forEach(topic => {
+              if (topic.id === id) {
+                this.topics.splice(this.topics.indexOf(topic), 1);
+              }
+            })
           })
       }
     },
