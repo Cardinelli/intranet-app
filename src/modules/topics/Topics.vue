@@ -3,7 +3,7 @@
     <div class="create-button mb-3">
       <b-button @click="showModal" variant="outline-info" size="sm">Create Topic</b-button>
     </div>
-    <b-card-group deck>
+    <b-card-group v-if="topics.length > 0" deck>
       <b-card v-for="topic in topics" :key="topic.title"
               bg-variant="dark"
               text-variant="white"
@@ -29,6 +29,9 @@
         </b-card-body>
       </b-card>
     </b-card-group>
+    <b-card v-else bg-variant="dark" text-variant="white">
+      <b-card-text><h4 class="text-center"> No Topics </h4></b-card-text>
+    </b-card>
     <topics-form-modal/>
     <topics-comments-modal/>
   </div>
@@ -65,18 +68,18 @@
       },
       onDeleteClick(id) {
         firebase.firestore().collection('topics').where('__name__', '==', id).get()
-        .then(response => {
-          response.forEach(doc => {
-            doc.ref.delete();
-            this.$bvToast.toast('Topic was deleted successfully', {
-              title: 'Success',
-              autoHideDelay: 5000,
-              variant: 'success',
-              appendToast: false
+          .then(response => {
+            response.forEach(doc => {
+              doc.ref.delete();
+              this.$bvToast.toast('Topic was deleted successfully', {
+                title: 'Success',
+                autoHideDelay: 5000,
+                variant: 'success',
+                appendToast: false
+              })
             })
+            this.getTopics();
           })
-          this.getTopics();
-        })
       }
     },
     beforeMount() {

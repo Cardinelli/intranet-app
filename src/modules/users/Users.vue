@@ -3,7 +3,7 @@
 <!--    <div class="btn-wrapper mb-3">-->
 <!--      <b-button size="sm" variant="outline-info">Create User</b-button>-->
 <!--    </div>-->
-    <b-card class="mb-4" v-for="user in users" :key="user" bg-variant="dark" text-variant="white"
+    <b-card class="mb-4" v-for="user in users" :key="user.id" bg-variant="dark" text-variant="white"
             :title="`${user.name}  ${user.surname}`">
       <b-card-text>
         <span>Age: </span> {{user.age}}

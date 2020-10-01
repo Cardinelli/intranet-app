@@ -45,8 +45,9 @@
       </div>
     </div>
     <div class="latest-news">
-      <b-card bg-variant="dark" text-variant="white" :title="`Latest Topics - ${latestTopic.title}`">
-        <b-card-text>
+      <b-card v-if="latestTopic.title" bg-variant="dark" text-variant="white"
+              :title="`Latest Topics - ${latestTopic.title}`">
+        <b-card-text v-if="latestTopic.description">
           {{latestTopic.description.substring(1, 200) + ' ' + '........'}}
         </b-card-text>
         <b-card-footer>
@@ -54,6 +55,8 @@
           <b-button @click="onViewClick()" class="mr-2 ml-2 float-right" variant="outline-info" size="sm">Read More
           </b-button>
         </b-card-footer>
+      </b-card>
+      <b-card v-else bg-variant="dark" text-variant="white" title="No Topics">
       </b-card>
     </div>
   </div>
