@@ -38,7 +38,7 @@ export default {
     getTopic({commit}, payload) {
       firebase.firestore().collection('topics').doc(payload).get()
         .then(snap => {
-          let data = {...snap.data(), commentCount: 0};
+          let data = {...snap.data(), id: snap.id, commentCount: 0};
           firebase.firestore().collection('comments').where('topic_id', '==', snap.id).get()
             .then(snapshot => {
               data.commentCount = snapshot.docs.length
