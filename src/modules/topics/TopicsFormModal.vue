@@ -9,17 +9,17 @@
   >
     <div class="row m-3">
       <div class="col-md-6">
-        <b-form-input id="input-none" v-model="modal.model.title" placeholder="Title"></b-form-input>
+        <b-form-input id="input-none" v-model="model.title" placeholder="Title"></b-form-input>
       </div>
       <div class="col-md-6">
-        <b-form-input id="input-none" v-model="modal.model.img" placeholder="Img Src"></b-form-input>
+        <b-form-input id="input-none" v-model="model.img" placeholder="Img Src"></b-form-input>
       </div>
     </div>
     <div class="row m-3">
       <div class="col-md-12">
         <b-form-textarea
           id="textarea"
-          v-model="modal.model.description"
+          v-model="model.description"
           placeholder="Description"
           rows="3"
           max-rows="6"
@@ -41,14 +41,9 @@
     components: {IntranetModal},
     computed: {
       ...mapState({
-        modal: state => state.modal
+        modal: state => state.modal,
+        model: state => state.modal.model
       })
-    },
-    props: {
-      title: {
-        type: String,
-        default: null
-      }
     },
     methods: {
       ...mapActions(['getTopics', 'hideModal']),
@@ -58,11 +53,11 @@
       onSubmit() {
         let today = new Date();
         let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-        if (!this.modal.model) {
+        if (!this.model.id) {
           firebase.firestore().collection('topics').add({
-            title: this.modal.model.title,
-            description: this.modal.model.description,
-            img: this.modal.model.img,
+            title: this.model.title,
+            description: this.model.description,
+            img: this.model.img,
             created_at: time,
             created_by: firebase.auth().currentUser.uid
           }).then(response => {
@@ -74,10 +69,10 @@
             console.log(error);
           })
         } else {
-          firebase.firestore().collection('topics').doc(this.modal.model.id).update({
-            title: this.modal.model.title,
-            description: this.modal.model.description,
-            img: this.modal.model.img,
+          firebase.firestore().collection('topics').doc(this.model.id).update({
+            title: this.model.title,
+            description: this.model.description,
+            img: this.model.img,
           }).then(response => {
             this.hideModal();
             this.$bvToast.toast('Topic was updated successfully', {
