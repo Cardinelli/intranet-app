@@ -90,6 +90,9 @@
         latestTopic: state => state.latestTopic
       })
     },
+    beforeUpdate() {
+      this.initializeDashboardData();
+    },
     beforeMount() {
       this.initializeDashboardData();
     }
