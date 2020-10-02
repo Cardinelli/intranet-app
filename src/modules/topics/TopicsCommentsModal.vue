@@ -28,7 +28,7 @@
         </div>
         <div class="details">
           <h6 class="mt-0">{{comment.display_name}}</h6>
-          <b-form-textarea :id="`comment-update-${comment.id}`" class="update-textarea mb-2" disabled
+          <b-form-textarea :id="`comment-update-${comment.id}`" rows="2" no-resize class="update-textarea mb-2" disabled
                            v-model="comment.comment"/>
         </div>
       </b-media>
@@ -40,10 +40,10 @@
     <b-card-footer>
       <div class="row">
         <div class="col-md-10">
-          <b-form-textarea v-model="commentModel.comment" placeholder="Comment"></b-form-textarea>
+          <b-form-textarea v-model="commentModel.comment" no-resize placeholder="Comment"></b-form-textarea>
         </div>
         <div class="col-md-2">
-          <b-button :disabled="!commentModel.comment" @click="writeComment" class="mt-3" size="sm"
+          <b-button type="submit" :disabled="!commentModel.comment" @click="writeComment" class="mt-3" size="sm"
                     variant="outline-primary"> Comment
           </b-button>
         </div>
