@@ -15,6 +15,7 @@
     <template v-slot:modal-footer>
       <div class="w-100">
         <b-button
+          type="submit"
           variant="outline-success"
           size="sm"
           class="float-right mr-1 ml-1"
@@ -25,7 +26,7 @@
       </div>
     </template>
 
-    <b-form>
+    <b-form @submit.prevent="onFormSubmit">
       <slot></slot>
       <slot v-for="(_, name) in $slots" :name="name" :slot="name"/>
       <button style="display:none"></button>
