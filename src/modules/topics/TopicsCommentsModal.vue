@@ -7,8 +7,8 @@
     :hide-footer="true"
     :scrollable="true"
   >
-    <b-card v-if="comments.length > 0">
-      <b-media v-for="comment in comments" :key="comment.id">
+    <b-card v-if="topic.comments && topic.comments.length > 0">
+      <b-media v-for="comment in topic.comments" :key="comment.id">
         <template v-slot:aside>
           <b-img
             src="https://www.iconfinder.com/data/icons/web-mobile-2-1/64/user_avatar_admin_web_mobile_business_office-512.png"
@@ -43,7 +43,7 @@
           <b-form-textarea v-model="commentModel.comment" placeholder="Comment"></b-form-textarea>
         </div>
         <div class="col-md-2">
-          <b-button :disabled="commentModel.comment ? false : true" @click="writeComment" class="mt-3" size="sm"
+          <b-button :disabled="!commentModel.comment" @click="writeComment" class="mt-3" size="sm"
                     variant="outline-primary"> Comment
           </b-button>
         </div>
@@ -72,15 +72,15 @@
     computed: {
       ...mapState({
         modal: state => state.commentModal,
-        comments: state => state.commentModal.comments,
-        topicId: state => state.commentModal.topicId
-      })
+        topics: state => state.topics,
+        topic: state => state.topic
+      }),
     },
     beforeMount() {
       this.currentUser = localStorage.getItem('user');
     },
     methods: {
-      ...mapActions(['hideCommentsModal', 'getComments', 'getTopics']),
+      ...mapActions(['hideCommentsModal', 'getTopics', 'getTopic']),
       Hide() {
         this.hideCommentsModal();
         this.commentModel.comment = '';
@@ -88,12 +88,13 @@
       writeComment() {
         let today = new Date();
         let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-        firebase.firestore().collection('comments').add({
+        let newComment = {
           comment: this.commentModel.comment,
           created_at: time,
           created_by: firebase.auth().currentUser.uid,
-          topic_id: this.topicId
-        }).then(response => {
+          topic_id: this.topic.id
+        }
+        firebase.firestore().collection('comments').add(newComment).then(response => {
           if (response) {
             this.$bvToast.toast('Comment was created successfully', {
               title: 'Success',
@@ -101,8 +102,13 @@
               variant: 'success',
               appendToast: false
             })
-            this.getComments();
-            this.getTopics();
+            newComment = {...newComment, id: response.id}
+            this.topics = this.topics.map(t => {
+              if (t.id === this.topic.id) {
+                t.comments.push(newComment);
+              }
+            })
+            this.topic.comments.push(newComment);
             this.commentModel = {
               comment: '',
             }
@@ -149,8 +155,7 @@
                 appendToast: false
               })
             })
-            this.getComments();
-            this.getTopics();
+            this.topic.comments = this.topic.comments.filter(comment => comment.id !== id);
           })
       }
     }

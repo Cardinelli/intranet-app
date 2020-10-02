@@ -21,11 +21,11 @@
           Edit
         </b-button>
         <b-button class="mr-2 ml-2 float-right"
-                  @click="showCommentsModal(topic.id)"
+                  @click="showCommentsModal(topic)"
                   variant="outline-primary"
                   size="sm">
           <i class="far fa-comments"></i>
-          <span> - {{topic.commentCount}} </span>
+          <span> - {{topic.comments.length}} </span>
         </b-button>
       </b-card-footer>
     </b-card>

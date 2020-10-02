@@ -11,9 +11,8 @@ export default {
     },
     commentModal: {
       topicId: '',
-      comments: [],
+      loading: true,
       show: false,
-      object: null
     }
   },
   actions: {
@@ -23,12 +22,14 @@ export default {
         .then(snap => {
           snap.forEach(doc => {
             let dat
-            dat = {...doc.data(), id: doc.id, commentCount: 0};
+            dat = {...doc.data(), id: doc.id, comments: []};
             firebase.firestore().collection('comments').where('topic_id', '==', doc.id).get()
               .then(snapshot => {
-                dat.commentCount = snapshot.docs.length
+                snapshot.forEach(cdoc => {
+                  dat.comments.push(cdoc.data())
+                })
               }).catch(error => {
-                console.log(error, 'errr');
+              console.log(error, 'errr');
             })
             data.push(dat);
           })
@@ -38,10 +39,19 @@ export default {
     getTopic({commit}, payload) {
       firebase.firestore().collection('topics').doc(payload).get()
         .then(snap => {
-          let data = {...snap.data(), id: snap.id, commentCount: 0};
+          let data = {...snap.data(), id: snap.id, comments: []};
           firebase.firestore().collection('comments').where('topic_id', '==', snap.id).get()
             .then(snapshot => {
-              data.commentCount = snapshot.docs.length
+              snapshot.forEach(cdoc => {
+                let commentsDat = {...cdoc.data(), id: cdoc.id, display_name: ''}
+                firebase.firestore().collection('users').where('__name__', '==', commentsDat.created_by).get()
+                  .then(resp => {
+                    resp.forEach(res => {
+                      commentsDat.display_name = res.data().name + ' ' + res.data().surname;
+                    })
+                  })
+                data.comments.push(commentsDat);
+              })
             }).catch(error => {
             console.log(error, 'errr');
           })
@@ -54,45 +64,21 @@ export default {
     hideModal({commit}) {
       commit('hideModal');
     },
-    showCommentsModal({dispatch, state, commit}, payload) {
+    showCommentsModal({dispatch, commit}, payload) {
       commit('showCommentsModal', payload);
-      dispatch('getComments', state.commentModal.topicId);
+      dispatch('getTopic', payload.id);
     },
     hideCommentsModal({commit}) {
       commit('hideCommentsModal');
     },
-    getComments({commit, state}, payload) {
-      let param
-      payload ? param = payload : param = state.commentModal.topicId
-      let data = [];
-      firebase.firestore().collection('comments').where('topic_id', '==', param).get()
-        .then(response => {
-          response.forEach(doc => {
-            let dat = {...doc.data(), id: doc.id, display_name: ''};
-            firebase.firestore().collection('users').where('__name__', '==', dat.created_by).get()
-              .then(resp => {
-                resp.forEach(res => {
-                  dat.display_name = res.data().name + ' ' + res.data().surname;
-                })
-              })
-            data.push(dat);
-          })
-        })
-      commit('updateComments', data)
-    }
   },
   mutations: {
     updateTopics(state, payload) {
       state.topics = payload;
     },
     updateTopic(state, payload) {
+      state.commentModal.loading = true;
       state.topic = payload;
-    },
-    updateComments(state, payload) {
-      state.commentModal.comments = payload;
-    },
-    updateCommentsCount(state, payload) {
-      state.commentModal.count = payload;
     },
     showModal(state, payload) {
       state.modal.show = true;
@@ -103,7 +89,8 @@ export default {
       state.modal.model = {};
     },
     showCommentsModal(state, payload) {
-      state.commentModal.topicId = payload
+      state.commentModal.loading = true;
+      state.commentModal.topicId = payload.id
       state.commentModal.show = true;
     },
     hideCommentsModal(state) {

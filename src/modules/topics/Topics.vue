@@ -15,11 +15,11 @@
         <b-card-body class="pt-0 pb-4">
           <div class="actions">
             <b-button class="mr-2 ml-2"
-                      @click="showCommentsModal(topic.id)"
+                      @click="showCommentsModal(topic)"
                       variant="outline-primary"
                       size="sm">
               <i class="far fa-comments"></i>
-              <span> - {{topic.commentCount}} </span>
+              <span> - {{topic.comments.length}} </span>
             </b-button>
             <b-button @click="onViewClick(topic)" class="mr-2 ml-2" variant="outline-info" size="sm">View</b-button>
             <b-button v-if="topic.created_by === currentUser" @click="onDeleteClick(topic.id)" class="mr-2 ml-2"
@@ -63,7 +63,7 @@
       onViewClick(topic) {
         this.$router.push({
           name: 'topics.view',
-          params: {id: topic.id, topic: topic}
+          params: {id: topic.id}
         })
       },
       onDeleteClick(id) {
